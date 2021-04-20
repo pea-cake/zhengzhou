@@ -48,8 +48,12 @@ function getHouseList(page){
 const hourseNumReg = new RegExp('商品房销售(.*?)套（间）')
 const areasReg = new RegExp('销售面积(.*?)万平方米')
 const avgPriceReg = new RegExp('销售均价(.*?)元\/平方米')
+// 二手房共成交4304套（间），成交面积43.81万平方米，成交均价11124元/平方米
+const second_hand_hourseNumReg  = new RegExp('二手房共成交(.*?)套（间）')
+const second_hand_areasReg = new RegExp('成交面积(.*?)万平方米')
+const second_hand_avgPriceReg = new RegExp('成交均价(.*?)元\/平方米')
 function getHouseDetail(title_url){
-    // 郑州全市商品房销售10130套（间），销售面积108.37万平方米，销售均价12084元/平方米
+    // 郑州全市商品房销售10130套（间），销售面积108.37万平方米，销售均价12084元/平方米 ---二手房销售 套   平方米  元
     return new Promise((res,rej)=>{
         request.get({encoding: null, url:title_url.url},function (err, response, body) {
             // 写入文件内容（如果文件不存在会创建一个文件）
@@ -60,9 +64,13 @@ function getHouseDetail(title_url){
             let hourseNum = str.match(hourseNumReg)
             let areas = str.match(areasReg)
             let avgPrice = str.match(avgPriceReg)
+            let second_hand_hourseNum = str.match(second_hand_hourseNumReg)
+            let second_hand_areas = str.match(second_hand_areasReg)
+            let second_hand_avgPrice = str.match(second_hand_avgPriceReg)
+
             // console.log(hourseNum,areas,avgPrice)
-            console.log(title_url.title,hourseNum[1],areas[1],avgPrice[1])
-            let line_data = title_url.title+'   '+hourseNum[1]+'   '+areas[1]+'   '+avgPrice[1]
+            let line_data = title_url.title+'   '+hourseNum[1]+'   '+areas[1]+'   '+avgPrice[1] +'   ---'+(second_hand_hourseNum[1]||0)+'    '+(second_hand_areas[1]||0)+'   '+(second_hand_avgPrice[1]||0)
+            console.log(line_data)
             res(line_data)                     
         })
     })
@@ -96,8 +104,8 @@ function getAllHouseList(){
 
 async function main(){
     let allHouseList = await getAllHouseList()
-    console.log('2016-2021---郑州市房地产市场销售情况 数量(套) 面积(万平米) 均价(元)')
-    let allDetail = '2016-2021---郑州市房地产市场销售情况 数量(套) 面积(万平米) 均价(元)\r\n'
+    console.log('2016-2021---郑州市房地产市场销售情况 数量(套) 面积(万平米) 均价(元)---二手房销售 套   平方米  元')
+    let allDetail = '2016-2021---郑州市房地产市场销售情况 数量(套) 面积(万平米) 均价(元)   ---二手房销售情况 数量(套)   面积(万平方米)  均价(元)\r\n'
     for(let i=0;i<allHouseList.length;i++){
         let res = await getHouseDetail(allHouseList[i])
         allDetail +=(res+'\r\n')
