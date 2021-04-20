@@ -1,0 +1,17 @@
+{
+  "name": "zhengzhouhourse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "peacake",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.6",
+    "iconv-lite": "^0.6.2",
+    "request": "^2.88.2"
+  }
+}
